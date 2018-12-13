@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Flux {
-    class Store <TState> : IStore <TState> {
+    public class Store <TState> : IStore <TState> {
 
         private TState state;
         public TState State => state;
@@ -10,13 +10,11 @@ namespace Flux {
         /// Middlewares not currently implemented.
         /// </summary>
         //TODO Implement Middlewares.
-        private readonly IMiddleware<TState>[] middlewares;
+        private List<IMiddleware<TState>> middlewares;
 
-
-        /// <summary>
-        /// Action to be called whenever the state changes.
-        /// </summary>
-        public event Action StateChanged;
+        public Store(TState state) {
+            this.state = state;
+        }
 
         /// <summary>
         /// Sends an action to the store. This is used to trigger state changes via the sent actions' Reduce() method.
@@ -24,10 +22,15 @@ namespace Flux {
         /// <typeparam name="TAction">TAction must implement the IAction interface.</typeparam>
         /// <param name="action">The action to be dispatched.</param>
         /// <returns></returns>
-        public TState Dispatch<TAction>(TAction action) where TAction : IAction {
+        public TState Dispatch<TAction>(TAction action) where TAction : IAction<TState> {
             //TODO: This is obviously incorrect. We need to store the state in the store, and we need to provide immutability.
-            state = (TState)action.Reduce(state);
+            state = action.Reduce(state);
             return state;
+        }
+
+        Store<TState> Add(IMiddleware<TState> middleware) {
+            middlewares.Add(middleware);
+            return this;
         }
     }
 }

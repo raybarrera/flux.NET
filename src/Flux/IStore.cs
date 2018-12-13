@@ -1,13 +1,13 @@
 ﻿using System;
 
 namespace Flux {
-    interface IStore<TState> where TState : struct {
+    interface IStore<TState> {
         
+        TState state { get; }
+
         event Action StateChanged;
 
-        object Dispatch<TAction>(TAction action) where TAction : IAction<TState>;
-
-        TState GetState();
+        object Dispatch<TAction>(TAction action) where TAction : IAction;
 
     }
 }

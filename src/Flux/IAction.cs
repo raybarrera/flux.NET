@@ -1,5 +1,5 @@
 ﻿namespace Flux {
-    interface IAction<TState> {
-        TState Reduce(TState state);
+    interface IAction {
+        object Reduce(object state);
     }
 }

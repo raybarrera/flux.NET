@@ -1,5 +1,5 @@
 # Flux.NET
-```
+```C#
 using Flux;
 using System;
 

@@ -1,9 +1,10 @@
 ﻿using System;
 
 namespace Flux {
-    class Store <TState> : IStore<TState> {
+    class Store <TState> : IStore <TState> {
 
-        public TState state => throw new NotImplementedException();
+        private TState state;
+        public TState State => state;
 
         /// <summary>
         /// Middlewares not currently implemented.
@@ -23,11 +24,10 @@ namespace Flux {
         /// <typeparam name="TAction">TAction must implement the IAction interface.</typeparam>
         /// <param name="action">The action to be dispatched.</param>
         /// <returns></returns>
-        public object Dispatch<TAction>(TAction action) where TAction : IAction {
-
+        public TState Dispatch<TAction>(TAction action) where TAction : IAction {
             //TODO: This is obviously incorrect. We need to store the state in the store, and we need to provide immutability.
-            object result = action.Reduce(state);
-            return result;
+            state = (TState)action.Reduce(state);
+            return state;
         }
     }
 }

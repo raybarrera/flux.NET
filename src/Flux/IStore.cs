@@ -3,11 +3,11 @@
 namespace Flux {
     interface IStore<TState> {
         
-        TState state { get; }
+        TState State { get; }
 
         event Action StateChanged;
 
-        object Dispatch<TAction>(TAction action) where TAction : IAction;
+        TState Dispatch<TAction>(TAction action) where TAction : IAction;
 
     }
 }

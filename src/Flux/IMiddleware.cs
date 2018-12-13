@@ -1,6 +1,6 @@
 ﻿namespace Flux {
     interface IMiddleware<TState> {
-        TState beforeAction(IAction action, TState state);
-        TState afterAction(IAction action, TState state);
+        TState BeforeAction(IAction action, TState state);
+        TState AfterAction(IAction action, TState state);
     }
 }

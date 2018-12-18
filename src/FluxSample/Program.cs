@@ -33,7 +33,7 @@ namespace FluxSample {
 
             Console.WriteLine(store.State.Count);
 
-            store.Dispatch<Increment>(new Increment());
+            store.Dispatch(new Increment());
 
             Console.WriteLine(store.State.Count);
             Console.ReadLine();

@@ -9,7 +9,7 @@ namespace Flux {
         /// <summary>
         /// Middlewares not currently implemented.
         /// </summary>
-        //TODO Implement Middlewares.
+        //TODO Implement Middleware.
         private List<IMiddleware<TState>> middlewares;
 
         public Store(TState state) {
@@ -23,7 +23,6 @@ namespace Flux {
         /// <param name="action">The action to be dispatched.</param>
         /// <returns></returns>
         public TState Dispatch<TAction>(TAction action) where TAction : IAction<TState> {
-            //TODO: This is obviously incorrect. We need to store the state in the store, and we need to provide immutability.
             state = action.Reduce(state);
             return state;
         }

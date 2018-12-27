@@ -9,5 +9,7 @@ namespace Flux {
         TState State { get; }
 
         TState Dispatch<TAction>(TAction action) where TAction : IAction<TState>;
+
+        void Subscribe(Action<TState> state);
     }
 }

@@ -30,13 +30,16 @@ namespace FluxSample {
     class Program {
         static void Main(string[] args) {
             Store<State> store = new Store<State>(new State(0));
-
             Console.WriteLine(store.State.Count);
-
+            store.Subscribe((s) => Console.WriteLine(s.Count));
             store.Dispatch(new Increment());
 
-            Console.WriteLine(store.State.Count);
+
             Console.ReadLine();
+        }
+
+        private void OnStateChanged(State state){
+            Console.WriteLine(state.Count);
         }
     }
 }

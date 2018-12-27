@@ -1,4 +1,4 @@
-# Flux.NET
+# Raydux.NET
 ```C#
 using Flux;
 using System;

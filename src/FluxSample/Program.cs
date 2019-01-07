@@ -1,43 +1,47 @@
-﻿using Flux;
 using System;
+using System.Collections.Generic;
 
-namespace FluxSample {
-    class State {
-        private readonly int count;
-        public int Count => count;
+namespace Flux {
+    public class Store <TState> : IStore <TState>, IDisposable {
 
-        public State(int count) {
-            this.count = count;
+        private TState state;
+        public TState State => state;
+        
+        public event Action OnStateChanged;
+
+        /// <summary>
+        /// Middlewares not currently implemented.
+        /// </summary>
+        //TODO Implement Middleware.
+        private List<IMiddleware<TState>> middlewares;
+
+        public Store(TState state) {
+            this.state = state;
         }
 
-        public override string ToString() {
-            return count.ToString();
-        }
-    }
-
-    class Increment : IAction<State> {
-        private readonly int by;
-
-        public Increment(int by = 1) {
-            this.by = by;
-        }
-
-        public State Reduce(State state) {
-            return new State(state.Count + by);
-        }
-    }
-
-    class Program {
-        static void Main(string[] args) {
-            Store<State> store = new Store<State>(new State(0));
-
-            store.OnStateChanged += () =>
+        /// <summary>
+        /// Sends an action to the store. This is used to trigger state changes via the sent actions' Reduce() method.
+        /// </summary>
+        /// <typeparam name="TAction">TAction must implement the IAction interface.</typeparam>
+        /// <param name="action">The action to be dispatched.</param>
+        /// <returns></returns>
+        public TState Dispatch<TAction>(TAction action) where TAction : IAction<TState> {
+            state = action.Reduce(state);
+            if (OnStateChanged != null)
             {
-                Console.WriteLine(store.State.Count);
-            };
+                OnStateChanged.Invoke();
+            }
+            return state;
+        }
 
-            store.Dispatch(new Increment());
-            Console.ReadLine();
+        Store<TState> Add(IMiddleware<TState> middleware) {
+            middlewares.Add(middleware);
+            return this;
+        }
+        
+        public void Dispose()
+        {
+            OnStateChanged = null;
         }
     }
 }

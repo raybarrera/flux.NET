@@ -7,7 +7,7 @@ namespace Flux {
         private TState state;
         public TState State => state;
 
-        public Action<TState> onStateChanged;
+        public event Action OnStateChanged;
 
         /// <summary>
         /// Middlewares not currently implemented.
@@ -27,8 +27,9 @@ namespace Flux {
         /// <returns></returns>
         public TState Dispatch<TAction>(TAction action) where TAction : IAction<TState> {
             state = action.Reduce(state);
-            if(onStateChanged != null) {
-                onStateChanged.Invoke(state);
+            if (OnStateChanged != null)
+            {
+                OnStateChanged.Invoke();
             }
             return state;
         }
@@ -38,14 +39,9 @@ namespace Flux {
             return this;
         }
 
-        public void Subscribe(Action<TState> state)
-        {
-            onStateChanged += state;
-        }
-
         public void Dispose()
         {
-            onStateChanged = null;
+            OnStateChanged = null;
         }
     }
 }

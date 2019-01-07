@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Flux {
-    interface IStore<TState> {
+    public interface IStore<TState> {
         
         /// <summary>
         /// Required property that returns the state contained in the store.
@@ -10,6 +10,6 @@ namespace Flux {
 
         TState Dispatch<TAction>(TAction action) where TAction : IAction<TState>;
 
-        void Subscribe(Action<TState> state);
+        event Action OnStateChanged;
     }
 }

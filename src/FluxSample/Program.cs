@@ -1,5 +1,7 @@
 ﻿using Flux;
 using System;
+using System.Runtime.Remoting;
+using Flux.Rx;
 
 namespace FluxSample {
     class State {
@@ -31,7 +33,9 @@ namespace FluxSample {
         static void Main(string[] args) {
             Store<State> store = new Store<State>(new State(0));
             Console.WriteLine(store.State.Count);
-            store.Subscribe((s) => Console.WriteLine(s.Count));
+
+            IObservable<State> observable = store.ObserveState();
+            
             store.Dispatch(new Increment());
 
 

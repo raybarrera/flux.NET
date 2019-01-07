@@ -31,11 +31,12 @@ namespace FluxSample {
         static void Main(string[] args) {
             Store<State> store = new Store<State>(new State(0));
 
-            Console.WriteLine(store.State.Count);
+            store.OnStateChanged += () =>
+            {
+                Console.WriteLine(store.State.Count);
+            };
 
             store.Dispatch(new Increment());
-
-            Console.WriteLine(store.State.Count);
             Console.ReadLine();
         }
     }

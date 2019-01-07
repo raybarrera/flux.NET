@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Flux {
-    public class Store <TState> : IStore <TState> {
+    public class Store <TState> : IStore <TState>, IDisposable {
 
         private TState state;
         public TState State => state;
+        
+        public event Action OnStateChanged;
 
         /// <summary>
         /// Middlewares not currently implemented.
@@ -24,12 +27,21 @@ namespace Flux {
         /// <returns></returns>
         public TState Dispatch<TAction>(TAction action) where TAction : IAction<TState> {
             state = action.Reduce(state);
+            if (OnStateChanged != null)
+            {
+                OnStateChanged.Invoke();
+            }
             return state;
         }
 
         Store<TState> Add(IMiddleware<TState> middleware) {
             middlewares.Add(middleware);
             return this;
+        }
+        
+        public void Dispose()
+        {
+            OnStateChanged = null;
         }
     }
 }

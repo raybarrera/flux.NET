@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Flux {
-    interface IStore<TState> {
+    public interface IStore<TState> {
         
         /// <summary>
         /// Required property that returns the state contained in the store.
